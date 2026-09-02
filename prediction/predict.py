@@ -82,9 +82,9 @@ def pred():
                 st.markdown("### 🔮 EMI Eligibility Prediction")
                 scaler_path = os.path.join(os.getcwd(), "scaler_cl.pkl")
                 scaler = joblib.load(scaler_path)
-                mlflow.set_tracking_uri(os.getenv("MLFLOW_TRACKING_URI"))
+                mlflow.set_tracking_uri(st.secrets("MLFLOW_TRACKING_URI"))
        
-                artifact_uri = os.getenv("ARTIFACTS1")
+                artifact_uri = st.secrets("ARTIFACTS1")
                 local_path = mlflow.artifacts.download_artifacts(artifact_uri)
                 model = joblib.load(local_path)
         # Use scaler feature names as the ground truth for required columns
