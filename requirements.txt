@@ -1,0 +1,15 @@
+pandas
+numpy
+plotly
+scikit-learn
+xgboost
+scipy
+statsmodels
+shap
+streamlit
+joblib
+seaborn
+matplotlib
+pymongo
+python-dotenv
+dnspython
