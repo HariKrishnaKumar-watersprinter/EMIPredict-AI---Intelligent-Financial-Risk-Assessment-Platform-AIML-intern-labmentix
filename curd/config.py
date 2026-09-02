@@ -22,12 +22,12 @@ class MongoDBConfig:
     PREDICTION_HISTORY_COLLECTION = "prediction_history"
     
     # Connection Pool
-    MAX_POOL_SIZE = int(st.secrets("MONGO_MAX_POOL_SIZE", 100))
-    MIN_POOL_SIZE = int(st.secrets("MONGO_MIN_POOL_SIZE", 10))
+    MAX_POOL_SIZE = int(st.secrets.get("MONGO_MAX_POOL_SIZE", 100))
+    MIN_POOL_SIZE = int(st.secrets.get("MONGO_MIN_POOL_SIZE", 10))
     SERVER_SELECTION_TIMEOUT_MS = int(st.secrets("MONGO_TIMEOUT_MS", 5000))
     
     # TTL for audit logs (days)
-    TTL_AUDIT_DAYS = int(st.secrets("AUDIT_TTL_DAYS", 90))
+    TTL_AUDIT_DAYS = int(st.secrets.get("AUDIT_TTL_DAYS", 90))
 
 
 class AppSettings:
