@@ -16,4 +16,4 @@ dnspython
 mlflow
 dagshub
 protobuf==4.25.3
-setuptools>=69.0.0
+setuptools
