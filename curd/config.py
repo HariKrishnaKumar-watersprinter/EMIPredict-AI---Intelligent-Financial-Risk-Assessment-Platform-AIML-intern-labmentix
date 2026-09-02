@@ -10,7 +10,7 @@ load_dotenv()
 
 class MongoDBConfig:
     """MongoDB Configuration"""
-    MONGO_URI = st.secrets("MONGO_URI", "mongodb://localhost:27017")
+    MONGO_URI = st.secrets("MONGO_URI")
     DATABASE_NAME = st.secrets("MONGO_DB_NAME", "emipredict_ai")
     
     # Collection Names
