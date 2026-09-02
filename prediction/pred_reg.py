@@ -80,9 +80,9 @@ def pred_r():
                 st.markdown("## 📈 EMI Amount Prediction")
                 scaler_path = os.path.join(os.getcwd(), "scaler_reg.pkl")
                 scaler = joblib.load(scaler_path)
-                mlflow.set_tracking_uri(st.secrets("MLFLOW_TRACKING_URI"))
+                mlflow.set_tracking_uri(st.secrets.get("MLFLOW_TRACKING_URI"))
        
-                artifact_uri = st.secrets("ARTIFACTS2")
+                artifact_uri = st.secrets.get("ARTIFACTS2")
                 local_path = mlflow.artifacts.download_artifacts(artifact_uri)
                 model = joblib.load(local_path)
         # Use scaler feature names as the ground truth for required columns
