@@ -13,6 +13,7 @@ from datetime import datetime
 from curd.mongo_curd1 import EMIMongoDBManager, OperationError
 from curd.config import DATASET_COLUMNS, CATEGORICAL_FIELDS, STATUS_VALUES
 import json
+import streamlit as st
 def get_db():   
     db_root = EMIMongoDBManager()
     db_f2 = EMIMongoDBManager(folder=2)
@@ -71,21 +72,7 @@ def pred_r():
         #data = data.loc[data1.index]
 
         # Apply get_dummies
-        data1 = pd.get_dummies(data1, drop_first=True, dtype=int)
-
-        # FIX 3: Reindex BEFORE transforming with the pipeline
-        #model_path = os.path.join(os.getcwd(), 'model', 'rf_emi_pred.pkl')
-        #if os.path.exists(model_path):
-           #  model = joblib.load(model_path)
-
-        ##possible_cols = list(model.feature_names_in_)
-        #data1 = data1.reindex(columns=possible_cols)
-        #data1 = data1.fillna(0) # Fill missing dummy columns with 0
-        #scaler_path = os.path.join( os.getcwd(), "scaler_reg.pkl")
-        #scaler   = joblib.load(scaler_path)
-        # FIX 4: Load pipeline and use .transform() ONLY. 
-        # Never use .fit_transform() on inference data!
-        
+        data1 = pd.get_dummies(data1, drop_first=True, dtype=int)       
         single = scaler.transform(data1)
 
         if st.button("🔮 Predict EMI Amount", type="primary", use_container_width=True):
@@ -93,9 +80,9 @@ def pred_r():
                 st.markdown("## 📈 EMI Amount Prediction")
                 scaler_path = os.path.join(os.getcwd(), "scaler_reg.pkl")
                 scaler = joblib.load(scaler_path)
-                mlflow.set_tracking_uri(os.getenv("MLFLOW_TRACKING_URI"))
+                mlflow.set_tracking_uri(st.secrets("MLFLOW_TRACKING_URI"))
        
-                artifact_uri = os.getenv("ARTIFACTS2")
+                artifact_uri = st.secrets("ARTIFACTS2")
                 local_path = mlflow.artifacts.download_artifacts(artifact_uri)
                 model = joblib.load(local_path)
         # Use scaler feature names as the ground truth for required columns
