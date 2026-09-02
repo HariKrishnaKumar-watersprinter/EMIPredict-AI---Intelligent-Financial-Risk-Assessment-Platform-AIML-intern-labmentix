@@ -24,7 +24,7 @@ class MongoDBConfig:
     # Connection Pool
     MAX_POOL_SIZE = int(st.secrets.get("MONGO_MAX_POOL_SIZE", 100))
     MIN_POOL_SIZE = int(st.secrets.get("MONGO_MIN_POOL_SIZE", 10))
-    SERVER_SELECTION_TIMEOUT_MS = int(st.secrets("MONGO_TIMEOUT_MS", 5000))
+    SERVER_SELECTION_TIMEOUT_MS = int(st.secrets.get("MONGO_TIMEOUT_MS", 5000))
     
     # TTL for audit logs (days)
     TTL_AUDIT_DAYS = int(st.secrets.get("AUDIT_TTL_DAYS", 90))
