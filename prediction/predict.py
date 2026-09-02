@@ -14,6 +14,7 @@ from curd.mongo_curd1 import EMIMongoDBManager, OperationError
 from curd.config import DATASET_COLUMNS, CATEGORICAL_FIELDS, STATUS_VALUES
 import json
 import mlflow
+import streamlit as st
 def get_db():
     db_root = EMIMongoDBManager()
     db_f1 = EMIMongoDBManager(folder=1)
