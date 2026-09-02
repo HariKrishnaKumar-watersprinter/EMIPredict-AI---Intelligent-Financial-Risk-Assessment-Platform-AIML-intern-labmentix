@@ -15,4 +15,4 @@ python-dotenv
 dnspython
 mlflow
 dagshub
-protobuf
+protobuf==4.25.3
