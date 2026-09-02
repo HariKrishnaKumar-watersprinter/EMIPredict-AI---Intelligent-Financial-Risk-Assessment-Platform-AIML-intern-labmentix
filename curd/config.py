@@ -10,8 +10,8 @@ load_dotenv()
 
 class MongoDBConfig:
     """MongoDB Configuration"""
-    MONGO_URI = os.getenv("MONGO_URI", "mongodb://localhost:27017")
-    DATABASE_NAME = os.getenv("MONGO_DB_NAME", "emipredict_ai")
+    MONGO_URI = st.secrets("MONGO_URI", "mongodb://localhost:27017")
+    DATABASE_NAME = st.secrets("MONGO_DB_NAME", "emipredict_ai")
     
     # Collection Names
     APPLICANTS_COLLECTION = "applicants"
@@ -22,20 +22,20 @@ class MongoDBConfig:
     PREDICTION_HISTORY_COLLECTION = "prediction_history"
     
     # Connection Pool
-    MAX_POOL_SIZE = int(os.getenv("MONGO_MAX_POOL_SIZE", 100))
-    MIN_POOL_SIZE = int(os.getenv("MONGO_MIN_POOL_SIZE", 10))
-    SERVER_SELECTION_TIMEOUT_MS = int(os.getenv("MONGO_TIMEOUT_MS", 5000))
+    MAX_POOL_SIZE = int(st.secrets("MONGO_MAX_POOL_SIZE", 100))
+    MIN_POOL_SIZE = int(st.secrets("MONGO_MIN_POOL_SIZE", 10))
+    SERVER_SELECTION_TIMEOUT_MS = int(st.secrets("MONGO_TIMEOUT_MS", 5000))
     
     # TTL for audit logs (days)
-    TTL_AUDIT_DAYS = int(os.getenv("AUDIT_TTL_DAYS", 90))
+    TTL_AUDIT_DAYS = int(st.secrets("AUDIT_TTL_DAYS", 90))
 
 
 class AppSettings:
     """Application Settings"""
     APP_NAME = "EMIPredict AI"
     APP_VERSION = "2.0.0"
-    ENVIRONMENT = os.getenv("ENVIRONMENT", "development")
-    DEBUG = os.getenv("DEBUG", "True").lower() == "true"
+    ENVIRONMENT = st.secrets("ENVIRONMENT", "development")
+    DEBUG = st.secrets("DEBUG", "True").lower() == "true"
 
 
 # ============================================================================
