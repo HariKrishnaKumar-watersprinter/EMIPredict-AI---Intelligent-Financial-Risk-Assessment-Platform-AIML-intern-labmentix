@@ -13,3 +13,5 @@ matplotlib
 pymongo
 python-dotenv
 dnspython
+mlflow
+dagshub
