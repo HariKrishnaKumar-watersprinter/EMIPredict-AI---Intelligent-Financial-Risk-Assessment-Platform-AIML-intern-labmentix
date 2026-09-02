@@ -34,8 +34,8 @@ class AppSettings:
     """Application Settings"""
     APP_NAME = "EMIPredict AI"
     APP_VERSION = "2.0.0"
-    ENVIRONMENT = st.secrets("ENVIRONMENT", "development")
-    DEBUG = st.secrets("DEBUG", "True").lower() == "true"
+    ENVIRONMENT = st.secrets.get("ENVIRONMENT", "development")
+    DEBUG = st.secrets.get("DEBUG", "True").lower() == "true"
 
 
 # ============================================================================
