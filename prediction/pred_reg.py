@@ -13,7 +13,6 @@ from datetime import datetime
 from curd.mongo_curd1 import EMIMongoDBManager, OperationError
 from curd.config import DATASET_COLUMNS, CATEGORICAL_FIELDS, STATUS_VALUES
 import json
-import streamlit as st
 def get_db():   
     db_root = EMIMongoDBManager()
     db_f2 = EMIMongoDBManager(folder=2)
@@ -72,7 +71,10 @@ def pred_r():
         #data = data.loc[data1.index]
 
         # Apply get_dummies
-        data1 = pd.get_dummies(data1, drop_first=True, dtype=int)       
+        data1 = pd.get_dummies(data1, drop_first=True, dtype=int)
+
+       
+        
         single = scaler.transform(data1)
 
         if st.button("🔮 Predict EMI Amount", type="primary", use_container_width=True):
@@ -80,9 +82,9 @@ def pred_r():
                 st.markdown("## 📈 EMI Amount Prediction")
                 scaler_path = os.path.join(os.getcwd(), "scaler_reg.pkl")
                 scaler = joblib.load(scaler_path)
-                mlflow.set_tracking_uri(st.secrets.get("MLFLOW_TRACKING_URI"))
+                mlflow.set_tracking_uri(os.getenv("MLFLOW_TRACKING_URI"))
        
-                artifact_uri = st.secrets.get("ARTIFACTS2")
+                artifact_uri = os.getenv("ARTIFACTS2")
                 local_path = mlflow.artifacts.download_artifacts(artifact_uri)
                 model = joblib.load(local_path)
         # Use scaler feature names as the ground truth for required columns
@@ -92,6 +94,7 @@ def pred_r():
         # This handles missing columns (adds 0) and extra columns (removes them)
                 data1 = data1.reindex(columns=required_cols, fill_value=0)
                 data1 = data1.fillna(0)
+                single = scaler.transform(data1)
                 predict = model.predict(single)
                 # Because we synced 'data' with 'data1' above, the lengths now match perfectly!
                 data['Predicted_EMI_Amount'] = pd.Series(predict)
@@ -109,25 +112,28 @@ def pred_r():
                 mime="text/csv",
                 help="Click to download all saved prediction records as a CSV file."
             )
-            try:
-                records = json.loads(data_to_save.to_json(orient='records', date_format='iso'))
-                saved_ids = []
-                failed_count = 0
-                
-                for record in records:
+            if st.button("💾 Save to Database", type="primary", use_container_width=True):
+                with st.spinner("Processing..."):
                     try:
-                        app_id = db.create_applicant(record)
-                        saved_ids.append(app_id)
-                    except Exception as row_e:
-                        failed_count += 1
-                        logger.warning(f"Failed to save row to MongoDB: {row_e}")
+                        records = json.loads(data_to_save.to_json(orient='records', date_format='iso'))
+                        saved_ids = []
+                        failed_count = 0
+                
+                        for record in records:
+                            try:
+                                app_id = db.create_applicant(record)
+                                saved_ids.append(app_id)
+                            except Exception as row_e:
+                                failed_count += 1
+                                logger.warning(f"Failed to save row to MongoDB: {row_e}")
                         
-                if saved_ids:
-                    st.success(f"💾 Saved {len(saved_ids)} records to MongoDB!")
-                if failed_count > 0:
-                    st.warning(f"⚠️ Failed to save {failed_count} records due to validation errors.")
+                        if saved_ids:
+                            st.success(f"💾 Saved {len(saved_ids)} records to MongoDB!")
+                        if failed_count > 0:
+                            st.warning(f"⚠️ Failed to save {failed_count} records due to validation errors.")
                     
-            except Exception as e:
-                st.error(f"DB save error: {e}")
+                    except Exception as e:
+                        st.error(f"DB save error: {e}")
+           
     else:
         st.info("☝️ Please upload a CSV file to proceed.")
