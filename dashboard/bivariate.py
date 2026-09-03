@@ -28,7 +28,9 @@ def biv(df):
             st.plotly_chart(fig, width='stretch')
             
             st.subheader("DTI Ratio vs Eligibility")
-            fig = px.histogram(df, x='debt_to_income', color='emi_eligibility',
+            df1=df.copy()
+            df1['debt_to_income']=(df['max_monthly_emi'] / df['monthly_salary']*100).round(2)
+            fig = px.histogram(df1, x='debt_to_income', color='emi_eligibility',
                               color_discrete_map={0: '#EF553B', 1: '#00CC96'},
                               nbins=50, barmode='overlay', opacity=0.7)
             fig.add_vline(x=0.4, line_dash='dash', line_color='black')
