@@ -74,9 +74,9 @@ def pred():
                 # Load Scaler and Model
                 scaler_path = os.path.join(os.getcwd(), "scaler_cl.pkl")
                 scaler = joblib.load(scaler_path)
-                mlflow.set_tracking_uri(os.getenv("MLFLOW_TRACKING_URI"))
+                mlflow.set_tracking_uri(st.Secrets("MLFLOW_TRACKING_URI"))
        
-                artifact_uri = os.getenv("ARTIFACTS1")
+                artifact_uri = st.Secrets("ARTIFACTS1")
                 local_path = mlflow.artifacts.download_artifacts(artifact_uri)
                 model = joblib.load(local_path)
                 
