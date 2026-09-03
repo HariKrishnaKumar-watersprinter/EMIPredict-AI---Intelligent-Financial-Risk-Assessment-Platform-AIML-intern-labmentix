@@ -40,7 +40,7 @@ def create_features(df):
                                           labels=['Poor', 'Fair', 'Good', 'Excellent'],
                                           include_lowest=True) # Added include_lowest to catch credit scores of exactly 0
     print("  - credit_score_category: Categorized credit score")
-    df['debt_to_income']=(df['max_monthly_emi'] / df['monthly_salary']*100).round(2)
+    
     # Financial health score
     # Replace inf with NaN, then NaN with 0, to avoid infinite values in debt_to_income
     df['financial_health'] = (
